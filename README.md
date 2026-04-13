@@ -77,7 +77,7 @@ pip install torch transformers scikit-learn matplotlib numpy
 # Small scale (40 sentences | 8 experts)
 bash run.sh
 
-# Large scale (2000 sentences | 64 experts)
+# 2000 classes | 40,000 sentences | Softmax vs Sigmoid vs Torus
 python compare_2000class.py
 ```
 
