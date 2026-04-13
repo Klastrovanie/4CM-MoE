@@ -78,7 +78,7 @@ pip install torch transformers scikit-learn matplotlib numpy
 bash run.sh
 
 # Large scale (2000 sentences | 64 experts)
-python compare_all_2k.py
+python compare_2000class.py
 ```
 
 ## Prior Art
