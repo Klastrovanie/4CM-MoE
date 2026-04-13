@@ -51,12 +51,19 @@ Modifications from original:
 
 ## Key Results
 
-| Model | Acc | Steps→90% | Entropy | c final |
+2000-class experiment | 40,000 sentences | 64 experts | Top-4
+
+| Model | Acc | Steps→10% | Entropy | c final |
 |---|---|---|---|---|
-| TF-IDF + Sigmoid | 100% | 100 | 0.829 | N/A |
-| TF-IDF + Torus | 100% | 100 | 0.849 | 2.468 |
-| BERT + Sigmoid | 100% | 50 | 0.832 | N/A |
-| BERT + Torus | 100% | 50 | **0.687** | 1.718 |
+| TF-IDF + Softmax | 0.9% ❌ | 650 | 0.812 | N/A |
+| TF-IDF + Sigmoid | 1.4% ❌ | 650 | 0.942 | N/A |
+| TF-IDF + Torus | 79.4% ✅ | 250 | 0.882 | 1.987 |
+| BERT + Softmax | 1.8% ❌ | 650 | 0.740 | N/A |
+| BERT + Sigmoid | 45.1% ⚠️ | 350 | 0.955 | N/A |
+| **BERT + Torus** | **98.4% ✅** | **200** | **0.796** | **1.074** |
+
+> Softmax exhibits Routing Collapse at scale — low entropy due to expert monopolization, not specialization.
+> TorusRouter achieves 98.4% accuracy with meaningful expert specialization (Entropy 0.796).
 
 ![Figure 1](figure1_4cm_moe_2000class.png)
 
