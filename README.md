@@ -1,11 +1,21 @@
 # 4CM-MoE
 
-MoE Router using 4CM Torus Function — replacing sigmoid to prevent Routing Collapse
-
-> This project aims to **innovate the MoE router itself**.
+MoE Router using 4CM Torus Function — replacing sigmoid to prevent Routing Collapse.
 
 **First Public Release:** 2026-04-13  
 **Last Updated:** 2026-04-13
+
+## Motivation
+
+| Model | Router Activation |
+|---|---|
+| Switch Transformer | Softmax |
+| Mixtral | Softmax |
+| DeepSeek-V3 | Sigmoid |
+| ReMoE (2024) | ReLU |
+| **4CM-MoE (2026)** | **Torus (2D, learnable)** |
+
+This project aims to **innovate the MoE router itself**.
 
 ## What is 4CM?
 
@@ -49,6 +59,20 @@ Modifications from original:
 | BERT + Torus | 100% | 50 | **0.687** | 1.718 |
 
 ![Figure 1](figure1_4cm_moe_2000.png)
+
+## Quick Start
+
+```bash
+pip install torch transformers scikit-learn matplotlib numpy
+```
+
+```bash
+# Small scale (40 sentences | 8 experts)
+bash run.sh
+
+# Large scale (2000 sentences | 64 experts)
+python compare_all_2k.py
+```
 
 ## Prior Art
 First public release: April 13, 2026
