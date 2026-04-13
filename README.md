@@ -2,6 +2,8 @@
 
 MoE Router using 4CM Torus Function — replacing sigmoid to prevent Routing Collapse
 
+> This project aims to **innovate the MoE router itself**.
+
 **First Public Release:** 2026-04-13  
 **Last Updated:** 2026-04-13
 
