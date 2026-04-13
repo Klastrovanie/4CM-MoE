@@ -2,7 +2,7 @@
 
 MoE Router using 4CM Torus Function — replacing sigmoid to prevent Routing Collapse
 
-**First Public Release:** 2026-04-13
+**First Public Release:** 2026-04-13  
 **Last Updated:** 2026-04-13
 
 ## What is 4CM?
