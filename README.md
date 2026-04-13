@@ -58,7 +58,7 @@ Modifications from original:
 | BERT + Sigmoid | 100% | 50 | 0.832 | N/A |
 | BERT + Torus | 100% | 50 | **0.687** | 1.718 |
 
-![Figure 1](figure1_figure1_4cm_moe_2000class.png)
+![Figure 1](figure1_4cm_moe_2000class.png)
 
 ## Quick Start
 
