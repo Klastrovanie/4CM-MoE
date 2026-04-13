@@ -82,8 +82,8 @@ python compare_all_2k.py
 ```
 
 ## Prior Art
-First public release: April 13, 2026
-Based on: PhD Dissertation, 2011
+First public release: April 13, 2026  
+Based on: the Torus function from PhD Dissertation, 2011 (ACM Digital Library: https://dl.acm.org/doi/book/10.5555/2231522) 
 
 ## License
 
