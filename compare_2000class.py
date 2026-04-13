@@ -24,6 +24,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 # Config
 # ──────────────────────────────────────────────
 
+SEED = 42
+
+torch.manual_seed(SEED)
+np.random.seed(SEED)
+
 NUM_EXPERTS          = 64     # DeepSeek-V3 style
 TOP_K                = 4      # select 4 out of 64
 NUM_CLASSES          = 2000   # 4 topics × 500 templates × 20 base sentences
@@ -493,7 +498,7 @@ def plot_figure(results):
 
     fig, axes = plt.subplots(2, 3, figsize=(18, 10))
     fig.suptitle(
-        "Figure 2: 4CM-MoE — 2000-Class Experiment\n"
+        "Figure 1: 4CM-MoE — 2000-Class Experiment\n"
         f"40,000 sentences | {NUM_EXPERTS} Experts | Top-{TOP_K} | "
         "Softmax Routing Collapse at Scale | Prior Art: April 13, 2026",
         fontsize=13, fontweight="bold"
@@ -595,13 +600,21 @@ def plot_figure(results):
 # ──────────────────────────────────────────────
 
 def main():
-    # device selection
-    if torch.backends.mps.is_available():
-        device = torch.device("mps")
-        print("Device: Apple MPS (M4 Max)")
-    elif torch.cuda.is_available():
+    torch.manual_seed(SEED)
+    np.random.seed(SEED)
+
+    # device selection + seed fixing
+    if torch.cuda.is_available():
         device = torch.device("cuda")
+        torch.cuda.manual_seed(SEED)
+        torch.cuda.manual_seed_all(SEED)
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
         print("Device: CUDA")
+    elif torch.backends.mps.is_available():
+        device = torch.device("mps")
+        torch.mps.manual_seed(SEED)
+        print("Device: Apple MPS (M4 Max)")
     else:
         device = torch.device("cpu")
         print("Device: CPU")
@@ -665,7 +678,7 @@ def main():
 
     # step 5: generate figure
     print("\n" + "="*60)
-    print("  Step 5: Generating Figure 2")
+    print("  Step 5: Generating Figure 1")
     print("="*60)
     plot_figure(results)
 
