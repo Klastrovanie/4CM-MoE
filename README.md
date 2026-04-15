@@ -41,7 +41,7 @@ $$
 **MoE Adaptation (this work):**
 
 $$
-x = \tanh\!\left(u_t^\top E_i^x\right) \cdot \alpha, \quad y = \tanh\!\left(u_t^\top E_i^y\right) \cdot \alpha
+x = \tanh(u_t^{\top} E_i^{x}) \cdot \alpha, \quad y = \tanh(u_t^{\top} E_i^{y}) \cdot \alpha
 $$
 
 $$
