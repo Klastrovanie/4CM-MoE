@@ -412,6 +412,13 @@ def run_training(X, Y, router_class, name, d_model):
 
     fp = {}
     if hasattr(router, 'c'):
+        save_path = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            f"{name.replace(' ', '_').replace('+', '')}_router.pt"
+        )
+        torch.save(router.state_dict(), save_path)
+        print(f"  → Router saved: {save_path}")
+
         fp = {
             "c":  router.c.item(),
             "d":  router.d.item(),
@@ -435,6 +442,61 @@ def run_training(X, Y, router_class, name, d_model):
         "s50":     steps_to_50,
         "fp":      fp,
     }
+
+def plot_scatter(router, X_bert, Y, name, out_dir):
+    """x-y routing space scatter plot by topic (TorusRouter only)."""
+    if not hasattr(router, 'E_x'):
+        return
+
+    topic_colors = ['#2196F3', '#55A868', '#FF9800', '#C44E52']
+    
+    fig, axes = plt.subplots(8, 8, figsize=(32, 32))
+    fig.suptitle(
+        f"Figure 2: {name} — x-y Routing Space by Topic\n"
+        "Each point = one sentence | Color = topic",
+        fontsize=12, fontweight="bold"
+    )
+
+    router.eval()
+    with torch.no_grad():
+        ux = X_bert[:, :router.d_half]
+        uy = X_bert[:, router.d_half:router.d_half*2]
+
+        for ei, ax in enumerate(axes.flatten()):
+            x = torch.tanh(ux @ router.E_x[:, ei]) * router.scale
+            y = torch.tanh(uy @ router.E_y[:, ei]) * router.scale
+
+            for ti, topic in enumerate(TOPIC_NAMES):
+                # select 500 classes per topic
+                mask = (Y >= ti * 500) & (Y < (ti + 1) * 500)
+                # then sample 100 out of them
+                idx_sample = torch.where(mask)[0][:100]
+                ax.scatter(
+                    x[idx_sample].numpy(),
+                    y[idx_sample].numpy(),
+                    color=topic_colors[ti],
+                    alpha=0.4, s=3,
+                    label=topic if ei == 0 else ""
+                )
+
+            ax.set_title(f"E{ei}", fontsize=7)
+            ax.tick_params(labelsize=5)
+            ax.set_xlabel("x"); ax.set_ylabel("y")
+            ax.axhline(0, color='gray', alpha=0.3)
+            ax.axvline(0, color='gray', alpha=0.3)
+            ax.grid(alpha=0.2)
+
+    # legend
+    handles = [plt.scatter([], [], color=c, label=t)
+               for t, c in zip(TOPIC_NAMES, topic_colors)]
+    fig.legend(handles=handles, loc='lower center',
+               ncol=4, fontsize=10, bbox_to_anchor=(0.5, -0.02))
+
+    plt.tight_layout()
+    out = os.path.join(out_dir, f"{name.replace(' ', '_').replace('+', '')}_scatter.png")
+    plt.savefig(out, dpi=150, bbox_inches="tight")
+    plt.close()
+    print(f"  → Scatter plot saved: {out}")
 
 
 # ──────────────────────────────────────────────
@@ -681,6 +743,23 @@ def main():
     print("  Step 5: Generating Figure 1")
     print("="*60)
     plot_figure(results)
+
+    # step 6: scatter plot (TorusRouter only)
+    print("\n" + "="*60)
+    print("  Step 6: Generating Scatter Plots")
+    print("="*60)
+    out_dir = os.path.dirname(os.path.abspath(__file__))
+    for r in results:
+        if "Torus" in r["name"] and "BERT" in r["name"]:
+            # load the router without training then plot scatter (to avoid GPU memory issues) 
+            router = TorusRouter(d_bert, NUM_EXPERTS, TOP_K)
+            pt_path = os.path.join(
+                out_dir,
+                f"{r['name'].replace(' ', '_').replace('+', '')}_router.pt"
+            )
+            if os.path.exists(pt_path):
+                router.load_state_dict(torch.load(pt_path, weights_only=True))
+                plot_scatter(router, X_bert, Y, r["name"], out_dir)
 
 
 if __name__ == "__main__":
