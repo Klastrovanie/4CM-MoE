@@ -51,7 +51,7 @@ $$
 where:
 - $u_t$ : hidden state (split into two halves)
 - $E_i^x, E_i^y$ : learnable expert centroid vectors
-- $\alpha = 2.0$ : scale (normalizes input to $(-2, +2)$)
+- $\alpha = 2.0$ : scale, normalizes input to (-2, +2)
 - $b_i$ : learnable bias per expert
 - $a_1, b_1, c, d$ : learnable torus shape parameters
 
