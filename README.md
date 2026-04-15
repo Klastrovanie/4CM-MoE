@@ -67,6 +67,13 @@ Modifications from original:
 
 ![Figure 1](figure1_4cm_moe_2000class.png)
 
+## x-y Routing Space (Figure 2)
+
+TorusRouter projects hidden states into 2D space.
+Each subplot = one Expert | Color = topic
+
+![Figure 2](BERT__Torus_scatter.png)
+
 ## Quick Start
 
 ```bash
