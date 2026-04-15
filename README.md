@@ -41,13 +41,26 @@ $$
 **MoE Adaptation (this work):**
 
 $$
-f(x, y) = \left[|x|^{a_1} + |y|^{b_1}\right] e^{-(|x|^c + |y|^d)}
+x = \tanh\!\left(u_t^\top E_i^x\right) \cdot \alpha, \quad y = \tanh\!\left(u_t^\top E_i^y\right) \cdot \alpha
 $$
+
+$$
+s_{i,t} = \left[|x|^{a_1} + |y|^{b_1}\right] e^{-(|x|^c + |y|^d)} + b_i
+$$
+
+where:
+- $u_t$ : hidden state (split into two halves)
+- $E_i^x, E_i^y$ : learnable expert centroid vectors
+- $\alpha = 2.0$ : scale (normalizes input to $(-2, +2)$)
+- $b_i$ : learnable bias per expert
+- $a_1, b_1, c, d$ : learnable torus shape parameters
 
 Modifications from original:
 - Position shifts $a, b$ removed → symmetric routing
+- $\tanh$ projection added → normalizes input to $(-2, +2)$ range
 - Absolute value added → handles negative affinity scores
-- Parameters $a_1, b_1, c, d$ made learnable via `nn.Parameter`
+- Bias $b_i$ added per expert → learnable offset
+- Parameters $a_1, b_1, c, d, \alpha$ made learnable via `nn.Parameter`
 
 ## Key Results
 
