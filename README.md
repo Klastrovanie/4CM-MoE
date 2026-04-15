@@ -60,7 +60,7 @@ Modifications from original:
 - $\tanh$ projection added → normalizes input to $(-2, +2)$ range
 - Absolute value added → handles negative affinity scores
 - Bias $b_i$ added per expert → learnable offset
-- Parameters $a_1, b_1, c, d, \alpha$ made learnable via `nn.Parameter`
+- Parameters $a_1, b_1, c, d$  made learnable via `nn.Parameter`
 
 ## Key Results
 
